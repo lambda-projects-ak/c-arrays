@@ -97,14 +97,29 @@ void arr_insert(Array *arr, char *element, int index)
 {
 
   // Throw an error if the index is greater than the current count
-
+  if (arr->count < index)
+  {
+    printf("%s\n", "Index out of range.");
+    return NULL;
+  }
   // Resize the array if the number of elements is over capacity
-
+  if (arr->count == arr->capacity)
+  {
+    resize_array(arr);
+  }
   // Move every element after the insert index to the right one position
+  for (int i = arr->count; i >= index; i--)
+  {
+    arr->elements[index] = arr->elements[index + 1];
+  }
+  arr->elements[index] = element;
+
+  // [1, 2, 4, 5, , ]
 
   // Copy the element (hint: use `strdup()`) and add it to the array
 
   // Increment count by 1
+  arr->count++;
 }
 
 /*****
@@ -119,7 +134,8 @@ void arr_append(Array *arr, char *element)
     resize_array(arr);
   }
   // Copy the element and add it to the end of the array
-  arr->elements[arr->count] = element;
+  char *string_pointer = strdup(element);
+  arr->elements[arr->count] = string_pointer;
 
   // Increment count by 1
   arr->count++;
@@ -136,22 +152,21 @@ void arr_remove(Array *arr, char *element)
   // Search for the first occurence of the element and remove it.
   // Don't forget to free its memory!
   int current = 0;
-  while (arr->elements[current] != element){
+  while (arr->elements[current] != element)
+  {
     current++;
   }
 
-  // maybe I need this to clean up the string stored at this pointer?
-  // char *temp = arr->element[current];
-
   // Shift over every element after the removed element to the left one position
-  while(current < arr->count - 1){
+  while (current < arr->count - 1)
+  {
     arr->elements[current] = arr->elements[current + 1];
     current++;
   }
 
   arr->elements[current] = NULL;
 
-  // free(temp); ?? Do we need to free a string assignment that we did not malloc
+  free(element);
 
   // Decrement count by 1
   arr->count--;
