@@ -133,11 +133,25 @@ void arr_append(Array *arr, char *element)
  *****/
 void arr_remove(Array *arr, char *element)
 {
-
   // Search for the first occurence of the element and remove it.
   // Don't forget to free its memory!
+  int current = 0;
+  while (arr->elements[current] != element){
+    current++;
+  }
+
+  // maybe I need this to clean up the string stored at this pointer?
+  // char *temp = arr->element[current];
 
   // Shift over every element after the removed element to the left one position
+  while(current < arr->count - 1){
+    arr->elements[current] = arr->elements[current + 1];
+    current++;
+  }
+
+  arr->elements[current] = NULL;
+
+  // free(temp); ?? Do we need to free a string assignment that we did not malloc
 
   // Decrement count by 1
   arr->count--;
