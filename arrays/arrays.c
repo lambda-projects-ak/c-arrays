@@ -38,8 +38,12 @@ Array *create_array(int capacity)
 void destroy_array(Array *arr)
 {
   // Free all elements
-  free(arr->elements);
+  for (int i = 0; i < arr->count; i++)
+  {
+    free(arr->elements[i]);
+  }
   // Free array
+  free(arr->elements);
   free(arr);
 }
 
@@ -79,7 +83,7 @@ void resize_array(Array *arr)
 char *arr_read(Array *arr, int index)
 {
   // Throw an error if the index is greater or equal to than the current count
-  if (arr->count < index)
+  if (arr->count <= index)
   {
     printf("%s\n", "Index out of range.");
     return NULL;
@@ -92,6 +96,7 @@ char *arr_read(Array *arr, int index)
  * Insert an element to the array at the given index
  *
  * Store the VALUE of the given string, not the REFERENCE
+ * use strdup() for this so you can free the memory afterwards
  *****/
 void arr_insert(Array *arr, char *element, int index)
 {
@@ -143,7 +148,7 @@ void arr_append(Array *arr, char *element)
  *****/
 void arr_remove(Array *arr, char *element)
 {
-  // Search for the first occurence of the element and remove it.
+  // Search for the first occurrence of the element and remove it.
   // Don't forget to free its memory!
   int current = 0;
   while (strcmp(arr->elements[current], element) != 0)
